@@ -14,7 +14,7 @@
 #define kScale 0.8
 #define kImageTag 888
 
-@interface TXScrollView()<UIScrollViewDelegate>
+@interface TXScrollView()<UIScrollViewDelegate,UIGestureRecognizerDelegate>
 
 @property (nonatomic,strong)UIScrollView *scrollView;
 @property (nonatomic,assign)NSInteger currIndex;
@@ -127,10 +127,93 @@
     }
 }
 
+//上滑删除
+- (void)setIsOpenDelete:(BOOL)isOpenDelete {
+    _isOpenDelete = isOpenDelete;
+    if (isOpenDelete) {
+        UIPanGestureRecognizer * panGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGes:)];
+        panGes.delegate = self;
+        [_scrollView addGestureRecognizer:panGes];
+    }
+}
+
+- (void)panGes:(UIPanGestureRecognizer *)panGes {
+    CGPoint velocity = [panGes velocityInView:_scrollView];
+    CGPoint translation = [panGes translationInView:_scrollView];
+    CGPoint location = [panGes locationInView:_scrollView];
+    
+    NSLog(@"velocity:%@-----translation:%@-----location:%@",NSStringFromCGPoint(velocity),NSStringFromCGPoint(translation),NSStringFromCGPoint(location));
+    
+    NSInteger index = _scrollView.contentOffset.x / _scrollView.frame.size.width;
+    UIImageView * currImageView = [_scrollView viewWithTag:kImageTag + index];
+    
+    static CGFloat currImageViewCenterY = 0;
+    
+    if (currImageView) {
+        
+        if (panGes.state == UIGestureRecognizerStateBegan) {
+            currImageViewCenterY = currImageView.center.y;
+        }
+        
+        currImageView.center = CGPointMake(currImageView.center.x, currImageViewCenterY + translation.y);
+        
+        if (panGes.state == UIGestureRecognizerStateEnded) {
+            if (fabs(translation.y) > 200) {
+                [UIView animateWithDuration:.25 animations:^{
+                    currImageView.center =  CGPointMake(currImageView.center.x, -currImageViewCenterY);
+                } completion:^(BOOL finished) {
+                    [currImageView removeFromSuperview];
+                    
+                    [self removeItemIndex:index];
+                }];
+            }else
+            {
+                [UIView animateWithDuration:.25 animations:^{
+                    currImageView.center = CGPointMake(currImageView.center.x, currImageViewCenterY);
+                }];
+            }
+        }
+    }
+}
+
+- (void)removeItemIndex:(NSInteger)index
+{
+    [self.itmeArray removeObjectAtIndex:index];
+    if (_delegate && [_delegate respondsToSelector:@selector(scrolIndex:)]) {
+        [_delegate scrolIndex:index >= self.itmeArray.count ? index - 1 : index];
+    }
+    
+    if (self.itmeArray.count >= index) {
+        self.scrollView.contentSize = CGSizeMake(kScrollViewWidth * _itmeArray.count, kViewHeight);
+        
+        for (NSInteger i = index + 1; i <= self.itmeArray.count; i ++) {
+            UIImageView * imageView = (UIImageView *)[_scrollView viewWithTag:kImageTag + i];
+            if (imageView) {
+                
+                [UIView animateWithDuration:.25 animations:^{
+                    if (index + 1 == i) {
+                        imageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+                    }
+                    imageView.center = CGPointMake(imageView.center.x - kScrollViewWidth, imageView.center.y);
+                } completion:^(BOOL finished) {
+                    imageView.tag -= 1;
+                }];
+            }
+        }
+        
+        if (1 == self.itmeArray.count) {
+            UIImageView * imageView = (UIImageView *)[_scrollView viewWithTag:kImageTag];
+            if (imageView) {
+                [UIView animateWithDuration:.25 animations:^{
+                    imageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+                }];
+            }
+        }
+    }
+}
 
 - (UIImage *)imageWithRoundedCornersSize:(CGSize)sizeToFit andCornerRadius:(CGFloat)radius image:(UIImage *)image
 {
-    
     CGRect rect = (CGRect){0.f, 0.f, sizeToFit};
     //    CGRect rect = CGRectMake(0.f, 0.f, sizeToFit.width, sizeToFit.height);
     UIGraphicsBeginImageContextWithOptions(sizeToFit, NO, UIScreen.mainScreen.scale);

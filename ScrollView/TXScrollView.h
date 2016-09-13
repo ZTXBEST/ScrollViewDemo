@@ -11,6 +11,7 @@
 
 @protocol TXScrollViewDelegate <NSObject>
 
+//变换背景蒙版
 - (void)scrolIndex:(NSInteger)index;
 
 @end
@@ -21,7 +22,7 @@
 @property (nonatomic, weak) id <TXScrollViewDelegate>delegate;
 //数据源
 @property (nonatomic, strong) NSMutableArray * itmeArray;
-//开启上滑删除
+//开启上下滑删除
 @property (nonatomic, assign) BOOL isOpenDelete;
 
 @end

@@ -10,7 +10,7 @@
 #import "TXScrollView.h"
 #import "UIImageEffects.h"
 
-@interface ViewController ()
+@interface ViewController ()<TXScrollViewDelegate>
 
 @property (nonatomic,strong)TXScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray * itmeArray;
@@ -36,10 +36,18 @@
     self.imageView.image = [self blurViewByLightEffectWithImage:self.itmeArray[0]];
     
     self.scrollView = [[TXScrollView alloc] initWithFrame:self.view.frame];
-//    self.scrollView.delegate = self;
-//    self.scrollView.isOpenDelete = YES;
+    self.scrollView.delegate = self;
+    self.scrollView.isOpenDelete = YES;
     self.scrollView.itmeArray = self.itmeArray;
     [self.view addSubview:self.scrollView];
+}
+
+//变换背景蒙版
+-(void)scrolIndex:(NSInteger)index
+{
+    if (self.itmeArray.count > index) {
+        self.imageView.image = [self blurViewByLightEffectWithImage:self.itmeArray[index]];
+    }
 }
 
 - (UIImage *)blurViewByLightEffectWithImage:(UIImage *)screenImage
