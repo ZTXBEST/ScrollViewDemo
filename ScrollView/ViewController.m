@@ -38,6 +38,7 @@
     self.scrollView = [[TXScrollView alloc] initWithFrame:self.view.frame];
     self.scrollView.delegate = self;
     self.scrollView.isOpenDelete = YES;
+//    self.scrollView.deleteStyle = TXScrollViewDeleteStyleSlideUp;
     self.scrollView.itmeArray = self.itmeArray;
     [self.view addSubview:self.scrollView];
 }

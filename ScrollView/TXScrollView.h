@@ -10,11 +10,15 @@
 
 
 @protocol TXScrollViewDelegate <NSObject>
-
 //变换背景蒙版
 - (void)scrolIndex:(NSInteger)index;
-
 @end
+
+typedef NS_ENUM(NSInteger, TXScrollViewDeleteStyle) {
+    TXScrollViewDeleteStyleNone,
+    TXScrollViewDeleteStyleSlideUp,//上滑
+    TXScrollViewDeleteStylePull//下拉
+};
 
 @interface TXScrollView : UIView
 
@@ -22,7 +26,9 @@
 @property (nonatomic, weak) id <TXScrollViewDelegate>delegate;
 //数据源
 @property (nonatomic, strong) NSMutableArray * itmeArray;
-//开启上下滑删除
+//开启删除
 @property (nonatomic, assign) BOOL isOpenDelete;
+//删除样式,默认下拉删除
+@property (nonatomic, assign) TXScrollViewDeleteStyle deleteStyle;
 
 @end

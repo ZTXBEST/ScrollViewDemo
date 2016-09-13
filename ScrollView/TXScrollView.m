@@ -211,6 +211,24 @@
         }
     }
 }
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        UIPanGestureRecognizer * panGes = (UIPanGestureRecognizer *)gestureRecognizer;
+        
+        CGPoint translation = [panGes translationInView:_scrollView];
+        if (self.deleteStyle == TXScrollViewDeleteStyleSlideUp) {
+            if (translation.y < 0) {
+                return YES;
+            }
+        }else {
+            if (translation.y > 0) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
 
 - (UIImage *)imageWithRoundedCornersSize:(CGSize)sizeToFit andCornerRadius:(CGFloat)radius image:(UIImage *)image
 {
