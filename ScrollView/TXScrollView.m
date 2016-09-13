@@ -17,6 +17,8 @@
 @interface TXScrollView()<UIScrollViewDelegate>
 
 @property (nonatomic,strong)UIScrollView *scrollView;
+@property (nonatomic,assign)NSInteger currIndex;
+@property (nonatomic,assign)CGFloat beginOffX;
 
 @end
 
@@ -67,6 +69,62 @@
         
     }
     self.scrollView.contentSize = CGSizeMake(kScrollViewWidth * _itmeArray.count, kViewHeight);
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    self.currIndex = scrollView.contentOffset.x / scrollView.frame.size.width;
+    self.beginOffX = scrollView.contentOffset.x;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    获取当前imageview
+    UIImageView * currImageView = [scrollView viewWithTag:kImageTag + self.currIndex];
+//    获取前一个imageview
+    UIImageView * beforeImageView = [scrollView viewWithTag:kImageTag + self.currIndex - 1];
+//    获取后一个imageview
+    UIImageView * afterImageView = [scrollView viewWithTag:kImageTag + self.currIndex + 1];
+    
+//    off_X>0时左滑
+    CGFloat off_X = scrollView.contentOffset.x - _beginOffX;
+    CGFloat scale = 1 - fabs(off_X / scrollView.frame.size.width);
+    CGFloat endScale = 1.0;
+    if (scale > 1.0) {
+        endScale = 1.0;
+    }else if (scale > kScale)
+    {
+        endScale = scale;
+    }else{
+        endScale = kScale;
+    }
+    
+    if (currImageView) {
+        currImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, endScale);
+    }
+    
+    if (beforeImageView) {
+        if (off_X < 0) {
+            CGFloat beforeScale = 1 - scale + kScale;
+            if (beforeScale > 1) {
+                beforeScale = 1;
+            }
+//            NSLog(@"------beforescale:%f",beforeScale);
+            beforeImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, beforeScale);
+        }else{
+            beforeImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, kScale);
+        }
+        
+    }
+    
+    if (afterImageView) {
+            if (off_X > 0) {
+            CGFloat afterScale = 1 - scale + kScale;
+            if (afterScale > 1) {
+                afterScale = 1;
+            }
+//            NSLog(@"------afterscale:%f",afterScale);
+            afterImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, afterScale);
+        }
+    }
 }
 
 
