@@ -8,20 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-
-@protocol TXScrollViewDelegate <NSObject>
-//变换背景蒙版
-- (void)scrolIndex:(NSInteger)index;
-@end
-
 typedef NS_ENUM(NSInteger, TXScrollViewDeleteStyle) {
     TXScrollViewDeleteStyleNone,
     TXScrollViewDeleteStyleSlideUp,//上滑
     TXScrollViewDeleteStylePull//下拉
 };
 
-@interface TXScrollView : UIView
+@protocol TXScrollViewDelegate <NSObject>
+//变换背景蒙版
+- (void)scrolIndex:(NSInteger)index;
+@end
 
+@interface TXScrollView : UIView
 
 @property (nonatomic, weak) id <TXScrollViewDelegate>delegate;
 //数据源

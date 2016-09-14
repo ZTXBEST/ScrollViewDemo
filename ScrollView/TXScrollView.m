@@ -76,7 +76,35 @@
     self.beginOffX = scrollView.contentOffset.x;
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    NSInteger index = scrollView.contentOffset.x / scrollView.frame.size.width;
+    if (_delegate && [_delegate respondsToSelector:@selector(scrolIndex:)]) {
+        [self.delegate scrolIndex:index];
+    }
+    
+    UIImageView * currImageView = [scrollView viewWithTag:kImageTag + index];
+    
+    UIImageView * beforeImageView = [scrollView viewWithTag:kImageTag + index - 1];
+    
+    UIImageView * afterImageView = [scrollView viewWithTag:kImageTag + index + 1];
+    
+    if (currImageView) {
+        currImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+    }
+    
+    if (beforeImageView) {
+        beforeImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, kScale);
+    }
+    
+    if (afterImageView) {
+        afterImageView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, kScale);
+    }
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+
 //    获取当前imageview
     UIImageView * currImageView = [scrollView viewWithTag:kImageTag + self.currIndex];
 //    获取前一个imageview
@@ -127,7 +155,7 @@
     }
 }
 
-//上滑删除
+//删除
 - (void)setIsOpenDelete:(BOOL)isOpenDelete {
     _isOpenDelete = isOpenDelete;
     if (isOpenDelete) {
