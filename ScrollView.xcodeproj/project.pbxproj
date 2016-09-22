@@ -100,6 +100,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		274814F51D926E25006DF9EB /* TXScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				276B59C41D8796DE00264243 /* TXScrollView.h */,
+				276B59C51D8796DE00264243 /* TXScrollView.m */,
+			);
+			name = TXScrollView;
+			sourceTree = "<group>";
+		};
 		276B59821D87968900264243 = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +132,7 @@
 		276B598D1D87968900264243 /* ScrollView */ = {
 			isa = PBXGroup;
 			children = (
+				274814F51D926E25006DF9EB /* TXScrollView */,
 				276B59C71D87974B00264243 /* Res */,
 				276B59C11D8796B200264243 /* UIImageEffects.h */,
 				276B59C21D8796B200264243 /* UIImageEffects.m */,
@@ -130,8 +140,6 @@
 				276B59921D87968900264243 /* AppDelegate.m */,
 				276B59941D87968900264243 /* ViewController.h */,
 				276B59951D87968900264243 /* ViewController.m */,
-				276B59C41D8796DE00264243 /* TXScrollView.h */,
-				276B59C51D8796DE00264243 /* TXScrollView.m */,
 				276B59971D87968900264243 /* Main.storyboard */,
 				276B599A1D87968900264243 /* Assets.xcassets */,
 				276B599C1D87968900264243 /* LaunchScreen.storyboard */,
@@ -550,6 +558,7 @@
 				276B59BA1D87968900264243 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		276B59BB1D87968900264243 /* Build configuration list for PBXNativeTarget "ScrollViewTests" */ = {
 			isa = XCConfigurationList;
@@ -558,6 +567,7 @@
 				276B59BD1D87968900264243 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		276B59BE1D87968900264243 /* Build configuration list for PBXNativeTarget "ScrollViewUITests" */ = {
 			isa = XCConfigurationList;
@@ -566,6 +576,7 @@
 				276B59C01D87968900264243 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
